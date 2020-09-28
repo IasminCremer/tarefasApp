@@ -3,6 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CpfValidator } from '../validators/cpf-validator';
 import { ComparacaoValidator } from '../validators/comparacao-validator';
+import { UsuariosService } from '../services/usuarios.service';
+import { AlertController } from '@ionic/angular';
+import { Usuario } from '../models/Usuario';
 
 @Component({
   selector: 'app-registro',
@@ -47,8 +50,15 @@ export class RegistroPage implements OnInit {
     ]
   };
 
-  constructor(private formBuilder: FormBuilder, private router:Router) { 
-    this.formRegistro = formBuilder.group({
+  constructor(
+    private formBuilder: FormBuilder, 
+    private usuariosService: UsuariosService,
+    public alertController: AlertController,
+    private router:Router
+    
+    ) { 
+    
+      this.formRegistro = formBuilder.group({
       nome: ['', Validators.compose([Validators.required, Validators.minLength(3)])],
       cpf: ['',Validators.compose([
         Validators.required, 
@@ -67,7 +77,43 @@ export class RegistroPage implements OnInit {
     });
   }
  
-  ngOnInit() {
+  async ngOnInit() {
+    await this.usuariosService.buscarTodos();
+    console.log(this.usuariosService.listaUsuarios);
+  }
+
+  public async salvarFormulario(){
+    if(this.formRegistro.valid){
+
+      let usuario = new Usuario();
+      usuario.nome = this.formRegistro.value.nome;
+      usuario.cpf = this.formRegistro.value.cpf;
+      usuario.dataNascimento = new Date(this.formRegistro.value.dataNascimento);
+      usuario.genero = this.formRegistro.value.genero;
+      usuario.celular = this.formRegistro.value.celular;
+      usuario.email = this.formRegistro.value.email;
+      usuario.senha = this.formRegistro.value.senha;
+
+      if (await this.usuariosService.salvar(usuario)) {
+        this.exibirAlerta('SUCESSO!', 'Usuario salvo com sucesso!');
+        this.router.navigateByUrl('/login');
+      }else{
+        this.exibirAlerta('ERRO!', 'Erro ao salvar o usuario');
+      }
+
+    }else{
+      this.exibirAlerta('ADVERTENCIA!', 'Formulário inválido<br/>Verifique os campos do seu formulário!');
+    }
+  }
+
+  async exibirAlerta(titulo: string, mensagem: string){
+    const alert = await this.alertController.create({
+      header: titulo,
+      message: mensagem,
+      buttons: ['OK']
+    });
+
+    await alert.present();
   }
 
   public registro(){

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -38,5 +39,20 @@ export class ArmazenamentoService {
     } else {
       return null;
     }
+  }
+
+  public removerDados(chave: string) {
+    if (chave.trim().length > 0) {
+      return this.storage.remove(chave)
+        .then(() => {
+          return true;
+        })
+        .catch(erro => {
+          return false;
+        });
+    } else {
+      return false;
+    }
+
   }
 }
