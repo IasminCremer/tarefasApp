@@ -66,7 +66,7 @@ export class RegistroPage implements OnInit {
         Validators.maxLength(14), 
         CpfValidator.cpfValido
       ])],
-      data: ['', Validators.compose([Validators.required])],
+      dataNascimento: ['', Validators.compose([Validators.required])],
       genero: ['', Validators.compose([Validators.required])],
       celular: ['', Validators.compose([Validators.maxLength(16)])],
       email: ['', Validators.compose([Validators.required])],

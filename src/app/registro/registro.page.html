@@ -1,5 +1,4 @@
 <ion-content color="primary" [fullscreen]="true">
-  <form [formGroup]="formRegistro">
     <div class="ion-text-center">
       <img src="assets/etec.png" alt="Etec">
     </div>
@@ -16,8 +15,7 @@
       </ion-label>
     </ion-item-divider>
 
-
-
+    <form [formGroup]="formRegistro">
     <ion-item lines="none">
       <ion-label position="stacked">Nome</ion-label>
       <ion-input formControlName="nome" type="text" placeholder="Digite seu nome"></ion-input>
@@ -42,11 +40,11 @@
 
     <ion-item lines="none">
       <ion-label position="stacked">Data de Nascimento</ion-label>
-      <ion-datetime formControlName="data" displayformat="DD/MM/YYYY" placeholder="Selecione" cancelText="Cancelar"
+      <ion-datetime formControlName="dataNascimento" displayformat="DD/MM/YYYY" placeholder="Selecione" cancelText="Cancelar"
         doneText="Ok"></ion-datetime>
-      <ng-container *ngFor="let erro of mensagens_validacao.data">
+      <ng-container *ngFor="let erro of mensagens_validacao.dataNascimento">
         <span class="msg-erro"
-          *ngIf="formRegistro.get('data').hasError(erro.tipo) && (formRegistro.get('data').dirty || formRegistro.get('data').touched)">
+          *ngIf="formRegistro.get('dataNascimento').hasError(erro.tipo) && (formRegistro.get('dataNascimento').dirty || formRegistro.get('dataNascimento').touched)">
           {{erro.mensagem}}
         </span>
       </ng-container>
